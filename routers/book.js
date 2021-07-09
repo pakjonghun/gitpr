@@ -1,5 +1,3 @@
-// 정훈
-
 const express = require("express");
 const router = express.Router();
 const Book = require("../schemas/book");
