@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
   res.send({ books });
 });
 
-router.patch("/:bookId", async (req, res) => {
+router.put("/:bookId", async (req, res) => {
   const { bookId: _id } = req.params;
   try {
     const isExist = await Book.exists({ _id });
