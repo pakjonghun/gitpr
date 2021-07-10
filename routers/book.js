@@ -6,7 +6,11 @@ const Room = require("../schemas/room");
 router.post("/", async (req, res) => {
   const { roomId, adult, kid, startDate, endDate } = req.body;
 
-  console.log(roomId, adult, kid, startDate, endDate);
+  endDate = new Date(endDate);
+  startDate = new Date(startDate);
+
+  difference = (endDate - startDate) / (1000 * 60 * 60 * 24);
+  
 
   const start = new Date(startDate).getMilliseconds();
   const end = new Date(endDate).getMilliseconds();
