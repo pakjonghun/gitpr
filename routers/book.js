@@ -53,6 +53,14 @@ router.get("/:bookId", async (req, res) => {
   res.json({ book });
 });
 
+router.get("/:bookId", async (req, res) => {
+  const bookId = req.params.bookId;
+  console.log(bookId);
+  const book = await Book.findById(bookId);
+
+  res.send({ book });
+});
+
 router.put("/:bookId", async (req, res) => {
   const { bookId: _id } = req.params;
 
