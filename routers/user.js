@@ -53,7 +53,7 @@ router.post("/", async (req, res) => {
       password: hashedPassword,
     });
 
-    return res.status(200).json({ message: "회원가입을 환영합니다." });
+    return res.status(200).json({ message: "success" });
   } catch (e) {
     console.log(e);
     return res.status(500).json({
@@ -76,7 +76,7 @@ router.post("/auth", async (req, res) => {
     req.session.loggedIn = true;
     req.session.user = user.nickName;
 
-    return res.status(200).json({ message: "로그인을 환영합니다.", token });
+    return res.status(200).json({ message: "success" });
   } catch (e) {
     console.log(e);
     return res.status(500).json({

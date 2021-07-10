@@ -4,7 +4,7 @@ const Book = require("../schemas/book");
 const Room = require("../schemas/room");
 
 router.post("/", async (req, res) => {
-  const { roomId, adult, kid, startDate, endDate } = req.body;
+  let { roomId, adult, kid, startDate, endDate } = req.body;
 
   endDate = new Date(endDate);
   startDate = new Date(startDate);
@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
   try {
     const isRoomExist = await Room.findOne({ _id: roomId });
     if (!isRoomExist) {
-      return res.status(401).json({ message: false });
+      return res.status(401).json({ message: "fail" });
     }
 
     const tempPrice = isRoomExist.price;
@@ -29,11 +29,11 @@ router.post("/", async (req, res) => {
       price,
     });
 
-    return res.json({ message: true, bookId: book._id });
+    return res.json({ message: "success", bookId: book._id });
   } catch (e) {
     console.log(e);
 
-    return res.status(500).json({ message: false });
+    return res.status(500).json({ message: "fail" });
   }
 });
 
@@ -50,17 +50,17 @@ router.put("/:bookId", async (req, res) => {
   try {
     const isExist = await Book.exists({ _id });
     if (!isExist) {
-      return res.status(404).json({ message: false });
+      return res.status(404).json({ message: "fail" });
     }
 
     console.log(isExist);
 
     await Book.updateOne({ _id }, { $set: req.body });
 
-    return res.json({ message: true });
+    return res.json({ message: "success" });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({ message: false });
+    return res.status(500).json({ message: "fail" });
   }
 });
 
@@ -69,14 +69,14 @@ router.delete("/:bookId", async (req, res) => {
   try {
     const isExist = await Book.exists({ _id });
     if (!isExist) {
-      return res.status(404).json({ message: false });
+      return res.status(404).json({ message: "fail" });
     }
 
     await Book.remove({ _id });
-    return res.json({ message: true });
+    return res.json({ message: "success" });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({ message: false });
+    return res.status(500).json({ message: "fail" });
   }
 });
 
