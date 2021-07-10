@@ -10,24 +10,24 @@ router.post("/", async (req, res) => {
   startDate = new Date(startDate);
 
   difference = (endDate - startDate) / (1000 * 60 * 60 * 24);
-  
-
-  const start = new Date(startDate).getMilliseconds();
-  const end = new Date(endDate).getMilliseconds();
-
-  const distance = start - end;
-  const distanceTimes = 1000 * 60 * 60 * 24;
-  console.log(distanceTimes);
-
-  start.get;
 
   try {
-    const isRoomExist = await Room.exists({ _id: roomId });
+    const isRoomExist = await Room.findOne({ _id: roomId });
     if (!isRoomExist) {
       return res.status(401).json({ message: false });
     }
 
-    const book = await Book.create({ roomId, date, adult, kid });
+    const tempPrice = isRoomExist.price;
+    const price = difference * tempPrice;
+
+    const book = await Book.create({
+      roomId,
+      startDate,
+      endDate,
+      adult,
+      kid,
+      price,
+    });
 
     return res.json({ message: true, bookId: book._id });
   } catch (e) {
