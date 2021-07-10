@@ -5,18 +5,19 @@ const Room = require("../schemas/room");
 
 //아래 함수에 room Id 추가, 룸이 있는지 확인 과정 추가.
 router.post("/", async (req, res) => {
-  //////////요기
-  const { roomId, adult, kid } = req.body;
-  const date = new Date();
+  const { roomId, adult, kid, startDate, endDate } = req.body;
+
+  console.log(roomId, adult, kid, startDate, endDate);
+
+  // startDate, endDate 계산해서 price 책정해야함!
+  // 밑에도 다 startDate, endDate 있는 것으로 수정해야 함
 
   try {
-    //아래 룸이 있는지 확인하는 코드
     const isRoomExist = await Room.exists({ _id: roomId });
     if (!isRoomExist) {
       return res.status(401).json({ message: false });
     }
 
-    //////////////////////////////////요기
     const book = await Book.create({ roomId, date, adult, kid });
 
     return res.json({ message: true, bookId: book._id });
