@@ -14,7 +14,8 @@ router.post("/", async (req, res) => {
   try {
     const isRoomExist = await Room.findOne({ _id: roomId });
     if (!isRoomExist) {
-      return res.status(401).json({ message: "fail" });
+      // return res.status(401).json({ message: "fail" });
+      return res.json({ message: "fail" });
     }
 
     const tempPrice = isRoomExist.price;
@@ -32,8 +33,7 @@ router.post("/", async (req, res) => {
     return res.json({ message: "success", bookId: book._id });
   } catch (e) {
     console.log(e);
-
-    return res.status(500).json({ message: "fail" });
+    return res.json({ message: "fail" });
   }
 });
 
@@ -42,15 +42,28 @@ router.get("/", async (req, res) => {
 
   console.log(books);
 
-  res.send({ books });
+  res.json({ books });
+});
+
+router.get("/:bookId", async (req, res) => {
+  const bookId = req.params.bookId;
+  console.log(bookId);
+  const book = await Book.findById(bookId);
+
+  res.json({ book });
 });
 
 router.put("/:bookId", async (req, res) => {
   const { bookId: _id } = req.params;
+
+  const validate = req.body.filter((item) => item.length !== 0);
+  if (validate.length === 0) return res.json({ message: "fail" });
+
   try {
     const isExist = await Book.exists({ _id });
     if (!isExist) {
-      return res.status(404).json({ message: "fail" });
+      // return res.status(404).json({ message: "fail" });
+      return res.json({ message: "fail" });
     }
 
     console.log(isExist);
@@ -60,7 +73,7 @@ router.put("/:bookId", async (req, res) => {
     return res.json({ message: "success" });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({ message: "fail" });
+    return res.json({ message: "fail" });
   }
 });
 
@@ -70,13 +83,14 @@ router.delete("/:bookId", async (req, res) => {
     const isExist = await Book.exists({ _id });
     if (!isExist) {
       return res.status(404).json({ message: "fail" });
+      return res.json({ message: "fail" });
     }
 
     await Book.remove({ _id });
     return res.json({ message: "success" });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({ message: "fail" });
+    return res.json({ message: "fail" });
   }
 });
 
