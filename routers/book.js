@@ -3,14 +3,19 @@ const router = express.Router();
 const Book = require("../schemas/book");
 const Room = require("../schemas/room");
 
-//아래 함수에 room Id 추가, 룸이 있는지 확인 과정 추가.
 router.post("/", async (req, res) => {
   const { roomId, adult, kid, startDate, endDate } = req.body;
 
   console.log(roomId, adult, kid, startDate, endDate);
 
-  // startDate, endDate 계산해서 price 책정해야함!
-  // 밑에도 다 startDate, endDate 있는 것으로 수정해야 함
+  const start = new Date(startDate).getMilliseconds();
+  const end = new Date(endDate).getMilliseconds();
+
+  const distance = start - end;
+  const distanceTimes = 1000 * 60 * 60 * 24;
+  console.log(distanceTimes);
+
+  start.get;
 
   try {
     const isRoomExist = await Room.exists({ _id: roomId });
