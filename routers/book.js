@@ -55,8 +55,13 @@ router.get("/:bookId", async (req, res) => {
 
 router.put("/:bookId", async (req, res) => {
   const { bookId: _id } = req.params;
+  console.log(typeof req.body);
+  let validate = [];
+  for (let item in req.body) {
+    req.body[item].length !== 0;
+    validate.push(item);
+  }
 
-  const validate = req.body.filter((item) => item.length !== 0);
   if (validate.length === 0) return res.json({ message: "fail" });
 
   try {
