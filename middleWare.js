@@ -26,7 +26,7 @@ const User = require("./schemas/user");
 exports.authMiddleWare = (req, res, next) => {
   const { authorization } = req.headers;
 
-  if (authorization !== null || authorization !== undefined) {
+  if (authorization !== null && authorization !== undefined) {
     const token = authorization.split(" ").pop();
     const { nickname } = jwt.verify(token, "secret");
     User.findOne({ nickname }).then((result) => {
