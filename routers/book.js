@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
       kid,
       price,
       userId,
-    });
+    }).populate({path:"userId",select:"nickname"});
     return res.json({ message: "success", bookId: book });
   } catch (e) {
     console.log(e);
@@ -109,7 +109,6 @@ router.delete("/:bookId", async (req, res) => {
     }
 
     await Book.remove({ _id });
-
     return res.json({ message: "success" });
   } catch (e) {
     console.log(e);

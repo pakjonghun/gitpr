@@ -6,6 +6,9 @@ const port = 3000;
 const cors = require("cors");
 app.use(cors());
 
+const cors = require('cors');
+app.use(cors());
+
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 /////

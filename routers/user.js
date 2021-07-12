@@ -72,14 +72,12 @@ router.post("/", async (req, res) => {
 
 router.post("/auth", async (req, res) => {
   const { email, password: oldOne } = req.body;
-
   try {
     const user = await User.findOne({ email });
 
     if (user == null) {
       return res.json({ message: "존재하지 않는 계정입니다." });
     }
-
     const isPasswordCorrect = await bcrypt.compare(oldOne, user.password);
 
     if (!user || !isPasswordCorrect) {
