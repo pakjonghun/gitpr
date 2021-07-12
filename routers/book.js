@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
 
     const tempPrice = isRoomExist.price;
     const price = difference * tempPrice;
-    const userId = res.locals.user.userId;
+    const userId = res.locals.user._id;
     const book = await Book.create({
       roomId,
       startDate,
@@ -31,7 +31,6 @@ router.post("/", async (req, res) => {
       price,
       userId,
     });
-
     return res.json({ message: "success", bookId: book });
   } catch (e) {
     console.log(e);
@@ -40,27 +39,21 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const books = await Book.find({}).poppulate("userId");
-
-  console.log(books);
-
-  res.json({ books });
+  const books = await Book.find({}).populate({
+    path: "userId",
+    select: "nickname",
+  });
+  return res.json({ books });
 });
 
 router.get("/:bookId", async (req, res) => {
   const bookId = req.params.bookId;
-  console.log(bookId);
-  const book = await Book.findById(bookId).populate("userId");
+  const book = await Book.findById(bookId).populate({
+    path: "userId",
+    select: "nickname",
+  });
 
   res.json({ book });
-});
-
-router.get("/:bookId", async (req, res) => {
-  const bookId = req.params.bookId;
-  console.log(bookId);
-  const book = await Book.findById(bookId).populate("userId");
-
-  res.send({ book });
 });
 
 router.put("/:bookId", async (req, res) => {

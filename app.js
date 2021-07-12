@@ -25,9 +25,6 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
 //인증 미들웨어
-// app.use(authMiddleWare);
-app.use(authMiddleWare);
-
 const router = require("./routers/router");
 app.use("/", [router]);
 

@@ -26,20 +26,22 @@ const User = require("./schemas/user");
 exports.authMiddleWare = (req, res, next) => {
   const { authorization } = req.headers;
 
-  if (!authorization || authorization === null || authorization === undefined) {
-    return next();
-  }
-
-  const token = authorization.split(" ").pop();
   try {
-    const { nickname } = jwt.verify(token, "secret");
-
-    User.findOne({ nickname }).then((result) => {
-      res.locals.user = result;
-      return next();
-    });
+    if (authorization !== null && authorization !== undefined) {
+      const tokenArray = authorization.split(" ");
+      if (tokenArray[0] !== "Bearer") {
+        return res.json({ message: "fail" });
+      }
+      const token = tokenArray.pop();
+      const { nickname } = jwt.verify(token, "secret");
+      User.findOne({ nickname }).then((result) => {
+        res.locals.user = result;
+        next();
+        return;
+      });
+    }
   } catch (e) {
     console.log(e);
-    next();
+    return res.json({ message: "fail" });
   }
 };

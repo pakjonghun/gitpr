@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 router.post("/", async (req, res) => {
+  console.log(res.locals.user);
   const { nickname, email, password, confirmPassword } = req.body;
   console.log("::", nickname, email, password, confirmPassword);
   const regExp = new RegExp(
