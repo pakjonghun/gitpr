@@ -89,7 +89,7 @@ router.post("/auth", async (req, res) => {
     // req.session.loggedIn = true;
     // req.session.user = user.nickName;
 
-    return res.json({ message: "success", token });
+    return res.json({ message: "success", token, nickname: user.nickname });
   } catch (e) {
     console.log(e);
     return res.json({

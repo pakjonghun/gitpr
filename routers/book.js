@@ -30,8 +30,13 @@ router.post("/", async (req, res) => {
       kid,
       price,
       userId,
-    }).populate({path:"userId",select:"nickname"});
-    return res.json({ message: "success", bookId: book });
+    }).populate({ path: "userId", select: "nickname" });
+
+    return res.json({
+      message: "success",
+      bookId: book._id,
+      nickname: book.userId.nickname,
+    });
   } catch (e) {
     console.log(e);
     return res.json({ message: "fail" });
