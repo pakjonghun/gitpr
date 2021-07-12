@@ -88,9 +88,6 @@ it("DELETE with wrong id. return error", async () => {
     expect(response.statusCode).toBe(501);
     expect(response.body.message).toBe("fail");
     expect(response.body.err.name).toBe("CastError");
-});
 
-afterAll((done) => {
     mongoose.connection.close();
-    done();
-})
+});
