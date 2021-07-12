@@ -12,6 +12,7 @@
 - ejs (for test)
 - cors
 - bcrypt
+- supertest
 
 
 # 이름, 맡은 일
