@@ -1,3 +1,4 @@
+//안녕하세요잘 가셪가셨습니다.
 const express = require("express");
 const router = express.Router();
 const Book = require("../schemas/book");
@@ -63,11 +64,10 @@ router.get("/:bookId", async (req, res) => {
 
 router.put("/:bookId", async (req, res) => {
   const { bookId: _id } = req.params;
-  // a;
+
   let validate = [];
   for (let item in req.body) {
-    req.body[item].length !== 0;
-    validate.push(item);
+    if (req.body[item].length !== 0) validate.push(item);
   }
 
   if (validate.length === 0) return res.json({ message: "fail" });
@@ -75,13 +75,29 @@ router.put("/:bookId", async (req, res) => {
   try {
     const isExist = await Book.exists({ _id });
     if (!isExist) {
-      // return res.status(404).json({ message: "fail" });
       return res.json({ message: "fail" });
     }
 
-    console.log(isExist);
+    let { roomId, adult, kid, startDate, endDate } = req.body;
 
-    await Book.updateOne({ _id }, { $set: req.body });
+    endDate = new Date(endDate);
+    startDate = new Date(startDate);
+
+    difference = (endDate - startDate) / (1000 * 60 * 60 * 24);
+
+    const isRoomExist = await Room.findOne({ _id: roomId });
+    if (!isRoomExist) {
+      // return res.status(401).json({ message: "fail" });
+      return res.json({ message: "fail" });
+    }
+
+    const tempPrice = isRoomExist.price;
+    const price = difference * tempPrice;
+
+    await Book.updateOne(
+      { _id },
+      { $set: { adult, kid, startDate, endDate, price } }
+    );
 
     return res.json({ message: "success" });
   } catch (e) {
@@ -96,10 +112,10 @@ router.delete("/:bookId", async (req, res) => {
     const isExist = await Book.exists({ _id });
     if (!isExist) {
       return res.status(404).json({ message: "fail" });
-      return res.json({ message: "fail" });
     }
 
     await Book.remove({ _id });
+
     return res.json({ message: "success" });
   } catch (e) {
     console.log(e);

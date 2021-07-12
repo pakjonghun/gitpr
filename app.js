@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
-//session setting
+const cors = require("cors");
+app.use(cors());
+
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 /////
@@ -41,24 +43,26 @@ const bookRouter = require("./routers/book");
 app.use("/api/book", [bookRouter]);
 
 //Session Setting
-app.use(
-  session({
-    secret: "secret",
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: "mongodb://localhost/14hotel",
-    }),
-    cookie: {
-      secure: true,
-      cookie: {
-        //로그인은 하루동안 로그인 유지
-        maxAge: 1000 * 60 * 24,
-      },
-    },
-  })
-);
+// app.use(
+//     session({
+//       secret: "secret",
+//       resave: false,
+//       saveUninitialized: false,
+//       store: MongoStore.create({
+//         mongoUrl: "mongodb://localhost/14hotel",
+//       }),
+//       cookie: {
+//         secure: true,
+//         cookie: {
+//           //로그인은 하루동안 로그인 유지
+//           maxAge: 1000 * 60 * 24,
+//         },
+//       },
+//     })
+//   );
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port}`);
 });
+
+module.exports = app;
