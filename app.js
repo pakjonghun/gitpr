@@ -6,9 +6,6 @@ const port = 3000;
 const cors = require("cors");
 app.use(cors());
 
-const cors = require('cors');
-app.use(cors());
-
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 /////
@@ -37,7 +34,7 @@ app.use("/api/user", [userRouter]);
 const roomRouter = require("./routers/room");
 app.use("/api/room", [roomRouter]);
 const reviewRouter = require("./routers/review");
-app.use("/api/room", [reviewRouter]);
+app.use("/api/review", [reviewRouter]);
 
 //예약기능 인기방 예약방 사진 가져오기
 const bookRouter = require("./routers/book");

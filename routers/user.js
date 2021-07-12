@@ -6,6 +6,7 @@ const User = require("../schemas/user");
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { authMiddleWare } = require("../middleWare");
 
 router.post("/", async (req, res) => {
   console.log(res.locals.user);
@@ -105,7 +106,7 @@ router.post("/auth", async (req, res) => {
 //   return res.end();
 // });
 
-router.get("/me", async (req, res) => {
+router.get("/me", authMiddleWare, async (req, res) => {
   try {
     const user = res.locals.user;
     if (!user) {

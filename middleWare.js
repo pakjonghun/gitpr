@@ -20,13 +20,13 @@
 
 // }
 
-// 제발...
-
 const jwt = require("jsonwebtoken");
 const User = require("./schemas/user");
 
 exports.authMiddleWare = (req, res, next) => {
   const { authorization } = req.headers;
+
+  console.log("auth", authorization);
 
   try {
     if (authorization !== null && authorization !== undefined) {
@@ -39,11 +39,9 @@ exports.authMiddleWare = (req, res, next) => {
       User.findOne({ nickname }).then((result) => {
         res.locals.user = result;
         next();
-        return;
       });
     }
   } catch (e) {
-    console.log(e);
     return res.json({ message: "fail" });
   }
 };

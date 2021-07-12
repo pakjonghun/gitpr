@@ -1,17 +1,21 @@
 // 정원
 
 const express = require("express");
+const { authMiddleWare } = require("../middleWare");
 const router = express.Router();
 const Reviews = require("../schemas/review");
 
+
+
 // 리뷰 작성
-router.post("/", async (req, res, next) => {
+router.post("/", authMiddleWare, async (req, res, next) => {
   console.log(res.locals.user);
+
   const { title, content } = req.body;
   const date = new Date();
 
     try {
-        await Reviews.create({ title: title, content: content, date: date });
+        await Reviews.create({ title: title, content: content, date: date, userId: res.locals.user._id });
 
         review = await Reviews.find({ }).sort({'_id': -1}).limit(1);
 
@@ -28,7 +32,7 @@ router.post("/", async (req, res, next) => {
 // 리뷰 전체 가져오기
 router.get("/", async (req, res, next) => {
   try {
-    const reviews = await Reviews.find({});
+    const reviews = await Reviews.find({}).populate({ path: "userId", select: "nickname" });
 
         res.status(201).json({ message: "success", reviews: reviews });
     } catch (err) {
@@ -41,7 +45,7 @@ router.get("/:reviewId", async (req, res, next) => {
   const { reviewId } = req.params;
 
     try {
-        const review = await Reviews.findOne({ _id: reviewId });
+        const review = await Reviews.findOne({ _id: reviewId }).populate({ path: "userId", select: "nickname" });
 
         res.status(201).json({ message: "success", review: review });
     } catch (err) {
@@ -50,7 +54,7 @@ router.get("/:reviewId", async (req, res, next) => {
 });
 
 // 리뷰 하나 수정하기
-router.put("/:reviewId", async (req, res, next) => {
+router.put("/:reviewId", authMiddleWare, async (req, res, next) => {
   const { reviewId } = req.params;
   const { title, content } = req.body;
 
@@ -65,7 +69,7 @@ router.put("/:reviewId", async (req, res, next) => {
 });
 
 // 리뷰 하나 삭제하기
-router.delete("/:reviewId", async (req, res, next) => {
+router.delete("/:reviewId", authMiddleWare, async (req, res, next) => {
   const { reviewId } = req.params;
 
     try {
