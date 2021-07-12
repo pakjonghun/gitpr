@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const books = await Book.find({});
+  const books = await Book.find({}).poppulate("userId");
 
   console.log(books);
 
@@ -50,7 +50,7 @@ router.get("/", async (req, res) => {
 router.get("/:bookId", async (req, res) => {
   const bookId = req.params.bookId;
   console.log(bookId);
-  const book = await Book.findById(bookId);
+  const book = await Book.findById(bookId).populate("userId");
 
   res.json({ book });
 });
@@ -58,7 +58,7 @@ router.get("/:bookId", async (req, res) => {
 router.get("/:bookId", async (req, res) => {
   const bookId = req.params.bookId;
   console.log(bookId);
-  const book = await Book.findById(bookId);
+  const book = await Book.findById(bookId).populate("userId");
 
   res.send({ book });
 });
