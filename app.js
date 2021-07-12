@@ -1,3 +1,4 @@
+const { authMiddleWare } = require("./middleWare");
 const express = require("express");
 const app = express();
 const port = 3000;
@@ -26,6 +27,7 @@ app.set("view engine", "ejs");
 //인증 미들웨어
 // app.use(authMiddleWare);
 
+app.use(authMiddleWare);
 const router = require("./routers/router");
 app.use("/", [router]);
 
@@ -35,7 +37,6 @@ app.use("/api/user", [userRouter]);
 const roomRouter = require("./routers/room");
 app.use("/api/room", [roomRouter]);
 const reviewRouter = require("./routers/review");
-const { authMiddleWare } = require("./middleWare");
 app.use("/api/room", [reviewRouter]);
 
 //예약기능 인기방 예약방 사진 가져오기
