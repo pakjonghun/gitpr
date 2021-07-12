@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
 
     const tempPrice = isRoomExist.price;
     const price = difference * tempPrice;
-
+    const userId = res.locals.user._id;
     const book = await Book.create({
       roomId,
       startDate,
@@ -29,9 +29,9 @@ router.post("/", async (req, res) => {
       adult,
       kid,
       price,
-    });
-
-    return res.json({ message: "success", bookId: book._id });
+      userId,
+    }).populate({path:"userId",select:"nickname"});
+    return res.json({ message: "success", bookId: book });
   } catch (e) {
     console.log(e);
     return res.json({ message: "fail" });
@@ -39,27 +39,21 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const books = await Book.find({});
-
-  console.log(books);
-
-  res.json({ books });
+  const books = await Book.find({}).populate({
+    path: "userId",
+    select: "nickname",
+  });
+  return res.json({ books });
 });
 
 router.get("/:bookId", async (req, res) => {
   const bookId = req.params.bookId;
-  console.log(bookId);
-  const book = await Book.findById(bookId);
+  const book = await Book.findById(bookId).populate({
+    path: "userId",
+    select: "nickname",
+  });
 
   res.json({ book });
-});
-
-router.get("/:bookId", async (req, res) => {
-  const bookId = req.params.bookId;
-  console.log(bookId);
-  const book = await Book.findById(bookId);
-
-  res.send({ book });
 });
 
 router.put("/:bookId", async (req, res) => {
@@ -93,9 +87,11 @@ router.put("/:bookId", async (req, res) => {
 
     const tempPrice = isRoomExist.price;
     const price = difference * tempPrice;
-    
 
-    await Book.updateOne({ _id }, { $set: {adult, kid, startDate, endDate, price} });
+    await Book.updateOne(
+      { _id },
+      { $set: { adult, kid, startDate, endDate, price } }
+    );
 
     return res.json({ message: "success" });
   } catch (e) {
@@ -113,7 +109,6 @@ router.delete("/:bookId", async (req, res) => {
     }
 
     await Book.remove({ _id });
-    
     return res.json({ message: "success" });
   } catch (e) {
     console.log(e);

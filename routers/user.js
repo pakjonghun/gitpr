@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 router.post("/", async (req, res) => {
+  console.log(res.locals.user);
   const { nickname, email, password, confirmPassword } = req.body;
   console.log("::", nickname, email, password, confirmPassword);
   const regExp = new RegExp(
@@ -71,14 +72,12 @@ router.post("/", async (req, res) => {
 
 router.post("/auth", async (req, res) => {
   const { email, password: oldOne } = req.body;
-  
   try {
     const user = await User.findOne({ email });
 
     if (user == null) {
       return res.json({ message: "존재하지 않는 계정입니다." });
     }
-    
     const isPasswordCorrect = await bcrypt.compare(oldOne, user.password);
 
     if (!user || !isPasswordCorrect) {
@@ -86,12 +85,11 @@ router.post("/auth", async (req, res) => {
       return res.json({ message: "존재하지 않는 계정입니다." });
     }
     //허허 토큰..
-    // const token = await jwt.sign({ nickname: user.nickname }, "secret");
-
+    const token = await jwt.sign({ nickname: user.nickname }, "secret");
     // req.session.loggedIn = true;
     // req.session.user = user.nickName;
 
-    return res.json({ message: "success" });
+    return res.json({ message: "success", token });
   } catch (e) {
     console.log(e);
     return res.json({
@@ -106,5 +104,18 @@ router.post("/auth", async (req, res) => {
 //   //이거 어떻게 응답 할지 정해야 함.
 //   return res.end();
 // });
+
+router.get("/me", async (req, res) => {
+  try {
+    const user = res.locals.user;
+    if (!user) {
+      return res.json({ message: "fail" });
+    }
+
+    return res.json({ message: "success", user: user.nickname });
+  } catch (e) {
+    return res.json({ message: "fail" });
+  }
+});
 
 module.exports = router;

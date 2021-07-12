@@ -35,6 +35,11 @@ const BookSchema = new mongoose.Schema({
     default: 0,
     require: true,
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    require: true,
+  },
 });
 
 BookSchema.virtual("bookId").get(() => {

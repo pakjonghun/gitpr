@@ -1,37 +1,45 @@
-const express = require('express');
+const { authMiddleWare } = require("./middleWare");
+const express = require("express");
 const app = express();
-const port = 3000
+const port = 3000;
+
+const cors = require("cors");
+app.use(cors());
 
 const cors = require('cors');
 app.use(cors());
 
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+/////
 
-const connect = require('./schemas')
+const connect = require("./schemas");
 connect();
 
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 //javascript folder setting
 app.use("/static", express.static(__dirname + "/js"));
 
-app.use(express.static('public'));
+app.use(express.static("public"));
 
-app.set('views', __dirname + "/views");
-app.set('view engine', 'ejs');
+app.set("views", __dirname + "/views");
+app.set("view engine", "ejs");
 
-const router = require('./routers/router');
-app.use('/', [router]);
+//인증 미들웨어
+const router = require("./routers/router");
+app.use("/", [router]);
 
 // Making API
-const userRouter = require('./routers/user');
-app.use('/api/user', [userRouter]);
-const roomRouter = require('./routers/room');
-app.use('/api/room', [roomRouter]);
-const reviewRouter = require('./routers/review');
-app.use('/api/review', [reviewRouter]);
+const userRouter = require("./routers/user");
+app.use("/api/user", [userRouter]);
+const roomRouter = require("./routers/room");
+app.use("/api/room", [roomRouter]);
+const reviewRouter = require("./routers/review");
+app.use("/api/room", [reviewRouter]);
+
+//예약기능 인기방 예약방 사진 가져오기
 const bookRouter = require("./routers/book");
 app.use("/api/book", [bookRouter]);
 
@@ -55,7 +63,7 @@ app.use("/api/book", [bookRouter]);
 //   );
 
 app.listen(port, () => {
-    console.log(`listening at http://localhost:${port}`);
-})
+  console.log(`listening at http://localhost:${port}`);
+});
 
 module.exports = app;

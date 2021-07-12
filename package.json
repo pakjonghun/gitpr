@@ -4,7 +4,7 @@
   "description": "14hotel",
   "main": "app.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --detectOpenHandles --forceExit"
   },
   "repository": {
     "type": "git",
