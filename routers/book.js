@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
 
     const tempPrice = isRoomExist.price;
     const price = difference * tempPrice;
-
+    const userId = res.locals.user.userId;
     const book = await Book.create({
       roomId,
       startDate,
@@ -29,9 +29,10 @@ router.post("/", async (req, res) => {
       adult,
       kid,
       price,
+      userId,
     });
 
-    return res.json({ message: "success", bookId: book._id });
+    return res.json({ message: "success", bookId: book });
   } catch (e) {
     console.log(e);
     return res.json({ message: "fail" });
