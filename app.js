@@ -57,3 +57,5 @@ app.use("/api/book", [bookRouter]);
 app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`);
 })
+
+module.exports = app;
