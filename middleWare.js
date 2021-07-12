@@ -28,7 +28,7 @@ exports.authMiddleWare = (req, res, next) => {
 
   if (authorization !== null || authorization !== undefined) {
     const token = authorization.split(" ").pop();
-    const { nickname } = token.verify(token, "secret");
+    const { nickname } = jwt.verify(token, "secret");
     User.findOne({ nickname }).then((result) => {
       res.locals.user = result;
     });
