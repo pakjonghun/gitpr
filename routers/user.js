@@ -87,7 +87,6 @@ router.post("/auth", async (req, res) => {
     }
     //허허 토큰..
     const token = await jwt.sign({ nickname: user.nickname }, "secret");
-
     // req.session.loggedIn = true;
     // req.session.user = user.nickName;
 
@@ -107,10 +106,9 @@ router.post("/auth", async (req, res) => {
 //   return res.end();
 // });
 
-router.post("/me", async (req, res) => {
+router.get("/me", async (req, res) => {
   try {
     const user = res.locals.user;
-
     if (!user) {
       return res.json({ message: "fail" });
     }
