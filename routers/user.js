@@ -107,4 +107,18 @@ router.post("/auth", async (req, res) => {
 //   return res.end();
 // });
 
+router.post("/me", async (req, res) => {
+  try {
+    const user = res.locals.user;
+
+    if (!user) {
+      return res.json({ message: "fail" });
+    }
+
+    return res.json({ message: "success", user: user.nickname });
+  } catch (e) {
+    return res.json({ message: "fail" });
+  }
+});
+
 module.exports = router;
