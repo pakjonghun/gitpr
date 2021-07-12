@@ -86,12 +86,12 @@ router.post("/auth", async (req, res) => {
       return res.json({ message: "존재하지 않는 계정입니다." });
     }
     //허허 토큰..
-    // const token = await jwt.sign({ nickname: user.nickname }, "secret");
+    const token = await jwt.sign({ nickname: user.nickname }, "secret");
 
     // req.session.loggedIn = true;
     // req.session.user = user.nickName;
 
-    return res.json({ message: "success" });
+    return res.json({ message: "success", token });
   } catch (e) {
     console.log(e);
     return res.json({
