@@ -4,7 +4,9 @@ const router = express.Router();
 const Book = require("../schemas/book");
 const Room = require("../schemas/room");
 
-router.post("/", async (req, res) => {
+const { authMiddleWare } = require("../middleWare");
+
+router.post("/", authMiddleWare, async (req, res) => {
   let { roomId, adult, kid, startDate, endDate } = req.body;
 
   endDate = new Date(endDate);
@@ -29,13 +31,13 @@ router.post("/", async (req, res) => {
       adult,
       kid,
       price,
-      userId,
-    }).populate({ path: "userId", select: "nickname" });
+      userId
+    });
 
     return res.json({
       message: "success",
       bookId: book._id,
-      nickname: book.userId.nickname,
+      nickname: res.locals.user.nickname,
     });
   } catch (e) {
     console.log(e);
@@ -43,7 +45,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", authMiddleWare, async (req, res) => {
   const books = await Book.find({}).populate({
     path: "userId",
     select: "nickname",
@@ -51,7 +53,7 @@ router.get("/", async (req, res) => {
   return res.json({ books });
 });
 
-router.get("/:bookId", async (req, res) => {
+router.get("/:bookId", authMiddleWare, async (req, res) => {
   const bookId = req.params.bookId;
   const book = await Book.findById(bookId).populate({
     path: "userId",
@@ -61,8 +63,13 @@ router.get("/:bookId", async (req, res) => {
   res.json({ book });
 });
 
-router.put("/:bookId", async (req, res) => {
+router.put("/:bookId", authMiddleWare, async (req, res) => {
   const { bookId: _id } = req.params;
+
+  const userId = await Book.findById(_id).userId;
+  if (res.locals.user.userId != userId) {
+    res.status(501).json({ err: err, message: "fail" });
+  }
 
   let validate = [];
   for (let item in req.body) {
@@ -105,8 +112,14 @@ router.put("/:bookId", async (req, res) => {
   }
 });
 
-router.delete("/:bookId", async (req, res) => {
+router.delete("/:bookId", authMiddleWare, async (req, res) => {
   const { bookId: _id } = req.params;
+
+  const userId = await Book.findById(_id).userId;
+  if (res.locals.user.userId != userId) {
+    res.status(501).json({ err: err, message: "fail" });
+  }
+  
   try {
     const isExist = await Book.exists({ _id });
     if (!isExist) {
