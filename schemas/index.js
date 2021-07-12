@@ -15,17 +15,18 @@ const url = "mongodb://localhost:27017/14hotel"
 // };
 
 const connect = () => {
-    mongoose.connect(url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true,
-        ignoreUndefined: true,
+  mongoose
+    .connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      ignoreUndefined: true,
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
-mongoose.connection.on('error', err => {
-    console.log("mongoDB connection error", err);
+mongoose.connection.on("error", (err) => {
+  console.log("mongoDB connection error", err);
 });
 
 module.exports = connect;

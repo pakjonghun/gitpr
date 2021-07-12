@@ -1,13 +1,14 @@
 // 정원
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const Reviews = require("../schemas/review");
 
 // 리뷰 작성
 router.post("/", async (req, res, next) => {
-    const {title, content} = req.body;
-    const date = new Date();
+  console.log(res.locals.user);
+  const { title, content } = req.body;
+  const date = new Date();
 
     try {
         await Reviews.create({ title: title, content: content, date: date });
@@ -26,8 +27,8 @@ router.post("/", async (req, res, next) => {
 
 // 리뷰 전체 가져오기
 router.get("/", async (req, res, next) => {
-    try {
-        const reviews = await Reviews.find({ });
+  try {
+    const reviews = await Reviews.find({});
 
         res.status(201).json({ message: "success", reviews: reviews });
     } catch (err) {
@@ -37,7 +38,7 @@ router.get("/", async (req, res, next) => {
 
 // 리뷰 하나 가져오기
 router.get("/:reviewId", async (req, res, next) => {
-    const { reviewId } = req.params;
+  const { reviewId } = req.params;
 
     try {
         const review = await Reviews.findOne({ _id: reviewId });
@@ -50,8 +51,8 @@ router.get("/:reviewId", async (req, res, next) => {
 
 // 리뷰 하나 수정하기
 router.put("/:reviewId", async (req, res, next) => {
-    const { reviewId } = req.params;
-    const { title, content } = req.body;
+  const { reviewId } = req.params;
+  const { title, content } = req.body;
 
     try {
         await Reviews.updateOne({ _id: reviewId }, {$set: {title, content, date: new Date()}});
@@ -65,7 +66,7 @@ router.put("/:reviewId", async (req, res, next) => {
 
 // 리뷰 하나 삭제하기
 router.delete("/:reviewId", async (req, res, next) => {
-    const { reviewId } = req.params;
+  const { reviewId } = req.params;
 
     try {
         await Reviews.deleteOne({ _id: reviewId });
